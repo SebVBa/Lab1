@@ -32,7 +32,7 @@ public class ServicioClientes {
     public void actualizar(String id, String correo, String telefono, boolean prioridad) {
     Objects.requireNonNull(ultimoRegistro(), "No se ha cargado ningun registro");
     validarRequeridos(id, correo, telefono);
-    if(!hayCambios(id, correo, telefono, prioridad)) return; // <-- prioridad incluida
+    if(!hayCambios(id, correo, telefono, prioridad)) return; 
     if (!gestor.existe(id)) throw new IllegalArgumentException("No existe un registro con id=" + id);
     if (!EMAIL.matcher(correo).matches()) throw new IllegalArgumentException("Formato de correo inválido");
     Cliente cliente = gestor.buscar(id);
