@@ -9,5 +9,5 @@ package Modelo;
  * @author sebas
  */
 public class ServicioCuentas {
-    
+
 }
