@@ -45,7 +45,7 @@ public class FrmMain extends javax.swing.JFrame {
         dtpMenu.setLayout(dtpMenuLayout);
         dtpMenuLayout.setHorizontalGroup(
             dtpMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1029, Short.MAX_VALUE)
+            .addGap(0, 1017, Short.MAX_VALUE)
         );
         dtpMenuLayout.setVerticalGroup(
             dtpMenuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -72,7 +72,10 @@ public class FrmMain extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(dtpMenu)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(dtpMenu)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
