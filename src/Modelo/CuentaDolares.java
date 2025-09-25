@@ -16,6 +16,11 @@ public class CuentaDolares extends Cuentas{
         this.saldoDolares = saldoDolares;
     }
 
+    public CuentaDolares(String numCuenta, Cliente cliente) {
+        super(numCuenta, cliente, true); 
+        this.saldoDolares = 0.0f;        
+    }
+
     public float getSaldoDolares() {
         return saldoDolares;
     }
@@ -23,7 +28,5 @@ public class CuentaDolares extends Cuentas{
     public void setSaldoDolares(float saldoDolares) {
         this.saldoDolares = saldoDolares;
     }
-    
-    
     
 }

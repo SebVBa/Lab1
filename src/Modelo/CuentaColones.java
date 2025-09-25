@@ -17,6 +17,11 @@ public class CuentaColones extends Cuentas{
         this.saldoColones = saldoColones;
     }
 
+    public CuentaColones(String numCuenta, Cliente cliente) {
+        super(numCuenta, cliente, true); 
+        this.saldoColones = 0.0f;        
+    }
+
     public float getSaldoColones() {
         return saldoColones;
     }
@@ -25,5 +30,4 @@ public class CuentaColones extends Cuentas{
         this.saldoColones = saldoColones;
     }
 
-    
 }
