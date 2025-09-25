@@ -56,7 +56,7 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
         btnCancelar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        txtPrioridad = new javax.swing.JTextField();
+        cmbPrioridad = new javax.swing.JComboBox<>();
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel6.setText("Telefono");
@@ -249,7 +249,7 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
         jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
         jLabel5.setText("Prioridad");
 
-        txtPrioridad.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        cmbPrioridad.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Si", "No" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -258,15 +258,11 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(116, 116, 116)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(116, 116, 116)
-                        .addComponent(jLabel5)
-                        .addGap(102, 102, 102))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(54, 54, 54))))
+                    .addComponent(jLabel5)
+                    .addComponent(cmbPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(84, 84, 84))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 573, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -280,9 +276,9 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
                         .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(txtPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(35, 35, 35)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbPrioridad, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(42, 42, 42)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -312,14 +308,8 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
         String id = txtCedula.getText();
         String correo = txtCorreo.getText();
         String telefono = txtTelefono.getText();
-        if (txtPrioridad.getText()=="Si") {
-            boolean prioridad = true;
-            controlador.actualizar(id, correo, telefono, prioridad);
-        }else{
-            boolean prioridad = false;
-            controlador.actualizar(id, correo, telefono, prioridad);
-        }
-        
+        boolean prioridad = cmbPrioridad.getSelectedItem().toString().equals("Si");
+        controlador.actualizar(id, correo, telefono, prioridad);
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
@@ -350,6 +340,7 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevo;
+    private javax.swing.JComboBox<String> cmbPrioridad;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -362,7 +353,6 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
     private javax.swing.JFormattedTextField txtCedula;
     private javax.swing.JTextField txtCorreo;
     private javax.swing.JTextField txtNombre;
-    private javax.swing.JTextField txtPrioridad;
     private javax.swing.JFormattedTextField txtTelefono;
     // End of variables declaration//GEN-END:variables
 
@@ -372,7 +362,7 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
         this.txtNombre.setText("");
         this.txtCorreo.setText("");
         this.txtTelefono.setText("");
-        this.txtPrioridad.setText("");
+        cmbPrioridad.setSelectedItem("No");
         txtCedula.requestFocus();
     }
     
@@ -384,12 +374,16 @@ public class FrmClientes extends javax.swing.JInternalFrame implements IVista<Cl
         
     @Override
     public void mostrarDatos(Cliente cliente){
-        this.txtCedula.setText(cliente.getId());
-        this.txtNombre.setText(cliente.getNombre());
-        this.txtCorreo.setText(cliente.getCorreo());
-        this.txtTelefono.setText(cliente.getTelefono());
-        if (cliente.getPreferred()) {this.txtPrioridad.setText("Si");
-        }else{this.txtPrioridad.setText("No");}
+        if (cliente == null) return; // seguridad extra
+    
+    this.txtCedula.setText(cliente.getId());
+    this.txtNombre.setText(cliente.getNombre());
+    this.txtCorreo.setText(cliente.getCorreo());
+    this.txtTelefono.setText(cliente.getTelefono());
+
+    if (cmbPrioridad != null) {
+        cmbPrioridad.setSelectedItem(cliente.getPreferred() ? "Si" : "No");
+    }
     }
     
     @Override
