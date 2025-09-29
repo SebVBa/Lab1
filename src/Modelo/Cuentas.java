@@ -21,10 +21,10 @@ public abstract class Cuentas {
         this.activa = true;
     }
 
-    // Métodos abstractos (depende de tipo de cuenta)
-    public abstract String getMoneda();
+    // Método abstracto: moneda de la cuenta
+    public abstract String getMoneda(); // "Colones" o "Dólares"
 
-    // Getters y Setters
+    // Getters y setters
     public String getNumeroCuenta() {
         return numeroCuenta;
     }
@@ -49,13 +49,17 @@ public abstract class Cuentas {
         this.activa = activa;
     }
 
+    public String getEstado() {
+        return activa ? "Activa" : "Inactiva";
+    }
+
     @Override
     public String toString() {
         return "Cuenta{" +
                 "numeroCuenta='" + numeroCuenta + '\'' +
                 ", cliente=" + cliente.getNombre() +
                 ", saldo=" + saldo +
-                ", activa=" + activa +
+                ", estado=" + getEstado() +
                 ", moneda=" + getMoneda() +
                 '}';
     }

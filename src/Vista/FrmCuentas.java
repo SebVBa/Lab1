@@ -6,6 +6,8 @@ package Vista;
 
 import Controlador.ControladorCuentas;
 import Modelo.Cliente;
+import Modelo.CuentaColones;
+import Modelo.CuentaDolares;
 import Modelo.Cuentas;
 import javax.swing.JOptionPane;
 
@@ -13,14 +15,14 @@ import javax.swing.JOptionPane;
  *
  * @author sebas
  */
-public class FrmCuentas extends javax.swing.JInternalFrame {
+public class FrmCuentas extends javax.swing.JInternalFrame implements IVista<Cuentas>{
 
     private final ControladorCuentas controlador;
 
-public FrmCuentas(ControladorCuentas controlador) {
-    this.controlador = controlador;
-    initComponents();
-}
+    public FrmCuentas(ControladorCuentas controlador) {
+        initComponents();
+        this.controlador = controlador;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,11 +36,13 @@ public FrmCuentas(ControladorCuentas controlador) {
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        txtId = new javax.swing.JFormattedTextField();
         jLabel3 = new javax.swing.JLabel();
-        txtNombre = new javax.swing.JTextField();
-        txtEstadoCuenta = new javax.swing.JFormattedTextField();
+        txtNumeroCuenta = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
+        EstadoCuenta = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        TipoCuenta = new javax.swing.JComboBox<>();
+        txtSaldo = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         btnBuscar = new javax.swing.JButton();
@@ -68,29 +72,10 @@ public FrmCuentas(ControladorCuentas controlador) {
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/licencia-de-conducir (2).png"))); // NOI18N
-        jLabel2.setText("Cedula");
+        jLabel2.setText("Saldo");
         jLabel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jLabel2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jLabel2.setOpaque(true);
-
-        txtId.setBackground(new java.awt.Color(51, 51, 51));
-        txtId.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        try {
-            txtId.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("#########")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        txtId.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtId.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                txtIdFocusLost(evt);
-            }
-        });
-        txtId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtIdActionPerformed(evt);
-            }
-        });
 
         jLabel3.setBackground(new java.awt.Color(204, 204, 204));
         jLabel3.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
@@ -101,32 +86,18 @@ public FrmCuentas(ControladorCuentas controlador) {
         jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jLabel3.setOpaque(true);
 
-        txtNombre.setBackground(new java.awt.Color(51, 51, 51));
-        txtNombre.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtNombre.setForeground(new java.awt.Color(255, 255, 255));
-        txtNombre.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        txtNombre.addActionListener(new java.awt.event.ActionListener() {
+        txtNumeroCuenta.setBackground(new java.awt.Color(51, 51, 51));
+        txtNumeroCuenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtNumeroCuenta.setForeground(new java.awt.Color(255, 255, 255));
+        txtNumeroCuenta.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtNumeroCuenta.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtNombreActionPerformed(evt);
-            }
-        });
-
-        txtEstadoCuenta.setBackground(new java.awt.Color(51, 51, 51));
-        txtEstadoCuenta.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
-        try {
-            txtEstadoCuenta.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("########")));
-        } catch (java.text.ParseException ex) {
-            ex.printStackTrace();
-        }
-        txtEstadoCuenta.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        txtEstadoCuenta.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtEstadoCuentaActionPerformed(evt);
+                txtNumeroCuentaActionPerformed(evt);
             }
         });
 
         jLabel7.setBackground(new java.awt.Color(204, 204, 204));
-        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 18)); // NOI18N
+        jLabel7.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(0, 0, 0));
         jLabel7.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/impuesto.png"))); // NOI18N
@@ -135,27 +106,54 @@ public FrmCuentas(ControladorCuentas controlador) {
         jLabel7.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jLabel7.setOpaque(true);
 
+        EstadoCuenta.setBackground(new java.awt.Color(0, 0, 0));
+        EstadoCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Activa", "Inactiva" }));
+
+        jLabel8.setBackground(new java.awt.Color(204, 204, 204));
+        jLabel8.setFont(new java.awt.Font("SansSerif", 0, 14)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(0, 0, 0));
+        jLabel8.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Imagenes/impuesto.png"))); // NOI18N
+        jLabel8.setText("Tipo de cuenta");
+        jLabel8.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jLabel8.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jLabel8.setOpaque(true);
+
+        TipoCuenta.setBackground(new java.awt.Color(0, 0, 0));
+        TipoCuenta.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Dolares", "Colones" }));
+
+        txtSaldo.setBackground(new java.awt.Color(51, 51, 51));
+        txtSaldo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txtSaldo.setForeground(new java.awt.Color(255, 255, 255));
+        txtSaldo.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        txtSaldo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSaldoActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE)
-                    .addComponent(txtId))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(txtSaldo)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 119, Short.MAX_VALUE))
                 .addGap(32, 32, 32)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtNombre)
+                    .addComponent(txtNumeroCuenta)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 313, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(16, 16, 16)
-                        .addComponent(txtEstadoCuenta))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, 204, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(jLabel7)
+                    .addComponent(EstadoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(TipoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel8))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -164,30 +162,33 @@ public FrmCuentas(ControladorCuentas controlador) {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtEstadoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(25, Short.MAX_VALUE))
+                    .addComponent(txtNumeroCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(EstadoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(TipoCuenta, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtSaldo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         jTable1.setBackground(new java.awt.Color(51, 51, 51));
         jTable1.setForeground(new java.awt.Color(255, 255, 255));
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Cedula", "Nombre", "Estado"
+                "Numero", "Cliente", "Saldo", "Estado", "Moneda"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false
+                false, false, false, true, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -255,7 +256,7 @@ public FrmCuentas(ControladorCuentas controlador) {
                         .addContainerGap())
                     .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(272, Short.MAX_VALUE)
                 .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -290,110 +291,50 @@ public FrmCuentas(ControladorCuentas controlador) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        limpiarCampos();
+        limpiar();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        try {
-        String idCliente = txtId.getText().trim();
-        if (idCliente.isEmpty()) throw new IllegalArgumentException("ID Cliente requerido");
-
-        String tipo = cmbTipoCuenta.getSelectedItem().toString(); // Si usas JComboBox
-        controlador.crearCuenta(tipo, idCliente);
-
-        // Actualizar campos UI
-        txtNombre.setText(controlador.getClienteNombre(idCliente));
-        txtEstadoCuenta.setText("Activa"); // Asumimos que se crea activa
-
-    } catch (Exception e) {
-        mostrarError(e.getMessage());
-    }
+        Cuentas cuenta = leerDatos();
+        if (cuenta != null) {
+            controlador.guardar(cuenta);
+            
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        try {
-            String numeroCuenta = txtEstadoCuenta.getText().trim();
-            if(numeroCuenta.isEmpty()) throw new IllegalArgumentException("Número de cuenta requerido");
-
-            boolean activa = txtEstadoCuenta.getText().equalsIgnoreCase("Activa");
-            servicioCuentas.actualizarEstado(numeroCuenta, activa);
-
-            mostrarMensaje("Estado actualizado correctamente");
-
-        } catch(Exception e) {
-            mostrarError(e.getMessage());
-        }
+         String numero = txtNumeroCuenta.getText();
+        boolean activa = EstadoCuenta.getSelectedItem().toString().equals("Activa");
+        controlador.actualizarEstado(numero, activa);
+        
 
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        try {
-            String numeroCuenta = txtEstadoCuenta.getText().trim();
-            if(numeroCuenta.isEmpty()) throw new IllegalArgumentException("Número de cuenta requerido");
-
-            servicioCuentas.eliminarCuenta(numeroCuenta);
-            mostrarMensaje("Cuenta eliminada correctamente");
-            limpiarCampos();
-
-        } catch(Exception e) {
-            mostrarError(e.getMessage());
-        }
+        String numero = txtNumeroCuenta.getText();
+        controlador.eliminar(numero);
+        
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
-        try {
-            String numeroCuenta = solicitar("Ingrese el número de cuenta", "Buscar Cuenta");
-            Cuentas cuenta = servicioCuentas.obtenerCuenta(numeroCuenta);
-            if(cuenta == null) throw new IllegalArgumentException("Cuenta no encontrada");
-
-            txtEstadoCuenta.setText(cuenta.isActiva() ? "Activa" : "Inactiva");
-            txtNombre.setText(cuenta.getCliente().getNombre());
-            txtId.setText(cuenta.getCliente().getId());
-
-            mostrarMensaje("Cuenta encontrada: " + cuenta.getNumeroCuenta());
-
-        } catch(Exception e) {
-            mostrarError(e.getMessage());
-        }
+         String numero = txtNumeroCuenta.getText();
+        controlador.buscar(numero);
     }//GEN-LAST:event_btnBuscarActionPerformed
-
-    private void txtIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIdFocusLost
-        if (!txtId.isEditable()) return;
-        String id = txtId.getText();
-        if(id.isBlank()) return;
-        
-    }//GEN-LAST:event_txtIdFocusLost
     
-    private void txtEstadoCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEstadoCuentaActionPerformed
+    private void txtNumeroCuentaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNumeroCuentaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtEstadoCuentaActionPerformed
+    }//GEN-LAST:event_txtNumeroCuentaActionPerformed
 
-    private void txtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtIdActionPerformed
+    private void txtSaldoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSaldoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtIdActionPerformed
+    }//GEN-LAST:event_txtSaldoActionPerformed
+    
 
-    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtNombreActionPerformed
-    private void limpiarCampos() {
-        txtId.setText("");
-        txtNombre.setText("");
-        txtEstadoCuenta.setText("");
-    }
-
-    private void mostrarMensaje(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
-    }
-
-    private void mostrarError(String mensaje) {
-        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
-    }
-
-    private String solicitar(String mensaje, String titulo) {
-        return JOptionPane.showInputDialog(this, mensaje, titulo, JOptionPane.QUESTION_MESSAGE);
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JComboBox<String> EstadoCuenta;
+    private javax.swing.JComboBox<String> TipoCuenta;
     private javax.swing.JButton btnActualizar;
     private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
@@ -403,11 +344,89 @@ public FrmCuentas(ControladorCuentas controlador) {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JFormattedTextField txtEstadoCuenta;
-    private javax.swing.JFormattedTextField txtId;
-    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtNumeroCuenta;
+    private javax.swing.JTextField txtSaldo;
     // End of variables declaration//GEN-END:variables
+
+    
+    private Cuentas leerDatos() {
+        try {
+            String tipo = TipoCuenta.getSelectedItem().toString();
+            String numero = txtNumeroCuenta.getText();
+            double saldo = Double.parseDouble(txtSaldo.getText());
+            String idCliente = solicitar("Ingrese ID del Cliente", "Cliente");
+
+            Cliente cliente = controlador.getServicioClientes().buscar(idCliente);
+            if (cliente == null) {
+                mostrarError("Cliente no encontrado");
+                return null;
+            }
+
+            if ("Colones".equalsIgnoreCase(tipo)) {
+                return new CuentaColones(numero, cliente);
+            } else {
+                return new CuentaDolares(numero, cliente);
+            }
+        } catch (NumberFormatException e) {
+            mostrarError("Saldo inválido");
+            return null;
+        }
+    }
+
+
+    
+
+    @Override
+    public void cambiarEstadoCampos(boolean estado) {
+        txtNumeroCuenta.setEditable(estado);
+        txtSaldo.setEditable(estado);
+        TipoCuenta.setEnabled(estado);
+        EstadoCuenta.setEnabled(estado);
+    }
+
+    @Override
+    public void mostrarDatos(Cuentas cuenta) {
+        if (cuenta == null) return;
+        txtNumeroCuenta.setText(cuenta.getNumeroCuenta());
+        txtSaldo.setText(String.valueOf(cuenta.getSaldo()));
+        TipoCuenta.setSelectedItem(cuenta.getMoneda());
+        EstadoCuenta.setSelectedItem(cuenta.isActiva() ? "Activa" : "Inactiva");
+    }
+
+    public void mostrarMensaje(String titulo, String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, titulo, JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    @Override
+    public void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
+
+    public void habilitarCampos() {
+        txtNumeroCuenta.setEditable(true);
+        txtSaldo.setEditable(true);
+        TipoCuenta.setEnabled(true);
+        EstadoCuenta.setEnabled(true);
+    }
+
+    public String solicitar(String mensaje, String titulo) {
+        return JOptionPane.showInputDialog(this, mensaje, titulo, JOptionPane.QUESTION_MESSAGE);
+    }
+
+    @Override
+    public void limpiar() {
+        txtNumeroCuenta.setText("");
+        txtSaldo.setText("");
+        TipoCuenta.setSelectedItem("Colones");
+        EstadoCuenta.setSelectedItem("Activa");
+    }
+
+    @Override
+    public boolean confirmar(String msg, String titulo) {
+        return JOptionPane.showConfirmDialog(this, msg, titulo, JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION;
+    }
 }

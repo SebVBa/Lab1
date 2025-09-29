@@ -5,8 +5,11 @@
 package Vista;
 
 import Modelo.GestorClientesMem;
+import Modelo.GestorCuentasMem;
 import Modelo.IGestorClientes;
+import Modelo.IGestorCuentas;
 import Modelo.ServicioClientes;
+import Modelo.ServicioCuentas;
 import javax.swing.JFrame;
 
 /**
@@ -38,6 +41,8 @@ public class FrmMain extends javax.swing.JFrame {
         menuBar = new javax.swing.JMenuBar();
         menuAdmin = new javax.swing.JMenu();
         menuClientes = new javax.swing.JMenuItem();
+        menuCuentas = new javax.swing.JMenuItem();
+        menuMovimientos = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,6 +68,22 @@ public class FrmMain extends javax.swing.JFrame {
             }
         });
         menuAdmin.add(menuClientes);
+
+        menuCuentas.setText("Cuentas");
+        menuCuentas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCuentasActionPerformed(evt);
+            }
+        });
+        menuAdmin.add(menuCuentas);
+
+        menuMovimientos.setText("Movimientos");
+        menuMovimientos.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuMovimientosActionPerformed(evt);
+            }
+        });
+        menuAdmin.add(menuMovimientos);
 
         menuBar.add(menuAdmin);
 
@@ -92,6 +113,18 @@ public class FrmMain extends javax.swing.JFrame {
         this.dtpMenu.add(frm);
         frm.setVisible(true);
     }//GEN-LAST:event_menuClientesActionPerformed
+
+    private void menuCuentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCuentasActionPerformed
+        IGestorCuentas gestor = new GestorCuentasMem();
+    ServicioCuentas servicio = new ServicioCuentas(gestor);
+    FrmCuentas frm = new FrmCuentas(servicio);
+    this.dtpMenu.add(frm);
+    frm.setVisible(true);
+    }//GEN-LAST:event_menuCuentasActionPerformed
+
+    private void menuMovimientosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuMovimientosActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_menuMovimientosActionPerformed
 
     /**
      * @param args the command line arguments
@@ -123,5 +156,7 @@ public class FrmMain extends javax.swing.JFrame {
     private javax.swing.JMenu menuAdmin;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem menuClientes;
+    private javax.swing.JMenuItem menuCuentas;
+    private javax.swing.JMenuItem menuMovimientos;
     // End of variables declaration//GEN-END:variables
 }

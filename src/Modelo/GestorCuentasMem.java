@@ -85,4 +85,11 @@ public class GestorCuentasMem implements IGestorCuentas {
     public List<Cuentas> listarEliminadas() {
         return Collections.unmodifiableList(cuentasEliminadas);
     }
+
+    @Override
+    public Cliente buscarCliente(String idCliente) {
+        
+        return null;
+        
+    }
 }

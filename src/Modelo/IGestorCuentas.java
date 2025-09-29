@@ -18,4 +18,6 @@ public interface IGestorCuentas {
     boolean existe(String numeroCuenta);
     List<Cuentas> listar();
     Cuentas ultimoRegistro();
+
+    public Cliente buscarCliente(String idCliente);
 }
