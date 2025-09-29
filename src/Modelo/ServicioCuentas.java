@@ -23,7 +23,7 @@ public class ServicioCuentas {
     private static long consecutivo = 1;
 
     // Simulación de base de datos en memoria
-    private final Map<String, Cuentas> cuentas = new HashMap<>();
+    private final Map<String, Cuentas> gestor = new HashMap<>();
 
     // Constructor: carga consecutivo desde archivo
     public ServicioCuentas() {
@@ -49,18 +49,18 @@ public class ServicioCuentas {
         }
 
         cuenta.setActiva(true); // siempre inicia activa
-        cuentas.put(numeroCuenta, cuenta);
+        gestor.put(numeroCuenta, cuenta);
         return cuenta;
     }
 
     // Obtener cuenta por número
     public Cuentas obtenerCuenta(String numeroCuenta) {
-        return cuentas.get(numeroCuenta);
+        return gestor.get(numeroCuenta);
     }
 
     // Actualizar estado de la cuenta (activa / inactiva)
     public boolean actualizarEstado(String numeroCuenta, boolean activa) {
-        Cuentas cuenta = cuentas.get(numeroCuenta);
+        Cuentas cuenta = gestor.get(numeroCuenta);
         if (cuenta == null) return false;
         cuenta.setActiva(activa);
         return true;
@@ -68,18 +68,18 @@ public class ServicioCuentas {
 
     // Eliminar cuenta (solo si saldo = 0)
     public boolean eliminarCuenta(String numeroCuenta) throws Exception {
-        Cuentas cuenta = cuentas.get(numeroCuenta);
+        Cuentas cuenta = gestor.get(numeroCuenta);
         if (cuenta == null) return false;
         if (cuenta.getSaldo() != 0) {
             throw new Exception("No se puede eliminar la cuenta, saldo distinto de 0");
         }
-        cuentas.remove(numeroCuenta);
+        gestor.remove(numeroCuenta);
         return true;
     }
 
     // Depósito
     public boolean depositar(String numeroCuenta, double monto) throws Exception {
-        Cuentas cuenta = cuentas.get(numeroCuenta);
+        Cuentas cuenta = gestor.get(numeroCuenta);
         if (cuenta == null) throw new Exception("Cuenta no encontrada");
         if (!cuenta.isActiva()) throw new Exception("Cuenta inactiva");
         if (monto <= 0) throw new Exception("Monto inválido");
@@ -90,7 +90,7 @@ public class ServicioCuentas {
 
     // Retiro
     public boolean retirar(String numeroCuenta, double monto) throws Exception {
-        Cuentas cuenta = cuentas.get(numeroCuenta);
+        Cuentas cuenta = gestor.get(numeroCuenta);
         if (cuenta == null) throw new Exception("Cuenta no encontrada");
         if (!cuenta.isActiva()) throw new Exception("Cuenta inactiva");
         if (monto <= 0) throw new Exception("Monto inválido");
@@ -143,7 +143,7 @@ public class ServicioCuentas {
     }
 
     public Map<String, Cuentas> getGestor() {
-    return cuentas;
+    return gestor;
 }
 
 }
