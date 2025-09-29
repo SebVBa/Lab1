@@ -8,9 +8,14 @@ package Modelo;
  *
  * @author sebas
  */
+import java.util.List;
+
 public interface IGestorCuentas {
     void guardar(Cuentas cuenta);
     void actualizar(Cuentas cuenta);
-    void eliminar(String numCuenta);
-    Cuentas buscar(String numCuenta);
+    void eliminar(String numeroCuenta);
+    Cuentas buscar(String numeroCuenta);
+    boolean existe(String numeroCuenta);
+    List<Cuentas> listar();
+    Cuentas ultimoRegistro();
 }

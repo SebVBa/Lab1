@@ -8,26 +8,13 @@ package Modelo;
  *
  * @author sebas
  */
-public class CuentaColones extends Cuentas{
-    
-    private float saldoColones;
-
-    public CuentaColones(float saldoColones, String numCuenta, Cliente cliente, boolean estado) {
-        super(numCuenta, cliente, estado);
-        this.saldoColones = saldoColones;
+public class CuentaColones extends Cuentas {
+    public CuentaColones(String numeroCuenta, Cliente cliente) {
+        super(numeroCuenta, cliente);
     }
 
-    public CuentaColones(String numCuenta, Cliente cliente) {
-        super(numCuenta, cliente, true); 
-        this.saldoColones = 0.0f;        
+    @Override
+    public String getMoneda() {
+        return "COLONES";
     }
-
-    public float getSaldoColones() {
-        return saldoColones;
-    }
-
-    public void setSaldoColones(float saldoColones) {
-        this.saldoColones = saldoColones;
-    }
-
 }

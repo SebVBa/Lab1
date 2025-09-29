@@ -18,12 +18,12 @@ import java.util.Map;
  * @author sebas
  */
 public class ServicioCuentas {
-         private static final String CODIGO_BANCO = "123"; // prefijo fijo de 3 dígitos
+    private static final String CODIGO_BANCO = "123"; // prefijo fijo de 3 dígitos
     private static final String ARCHIVO_CONSECUTIVO = "consecutivo.txt";
     private static long consecutivo = 1;
 
     // Simulación de base de datos en memoria
-    private Map<String, Cuentas> cuentas = new HashMap<>();
+    private final Map<String, Cuentas> cuentas = new HashMap<>();
 
     // Constructor: carga consecutivo desde archivo
     public ServicioCuentas() {
@@ -48,6 +48,7 @@ public class ServicioCuentas {
             cuenta = new CuentaDolares(numeroCuenta, cliente);
         }
 
+        cuenta.setActiva(true); // siempre inicia activa
         cuentas.put(numeroCuenta, cuenta);
         return cuenta;
     }
@@ -57,30 +58,58 @@ public class ServicioCuentas {
         return cuentas.get(numeroCuenta);
     }
 
-    // Depósito
-    public boolean depositar(String numeroCuenta, double monto) {
+    // Actualizar estado de la cuenta (activa / inactiva)
+    public boolean actualizarEstado(String numeroCuenta, boolean activa) {
         Cuentas cuenta = cuentas.get(numeroCuenta);
-        if (cuenta == null || monto <= 0) return false;
+        if (cuenta == null) return false;
+        cuenta.setActiva(activa);
+        return true;
+    }
+
+    // Eliminar cuenta (solo si saldo = 0)
+    public boolean eliminarCuenta(String numeroCuenta) throws Exception {
+        Cuentas cuenta = cuentas.get(numeroCuenta);
+        if (cuenta == null) return false;
+        if (cuenta.getSaldo() != 0) {
+            throw new Exception("No se puede eliminar la cuenta, saldo distinto de 0");
+        }
+        cuentas.remove(numeroCuenta);
+        return true;
+    }
+
+    // Depósito
+    public boolean depositar(String numeroCuenta, double monto) throws Exception {
+        Cuentas cuenta = cuentas.get(numeroCuenta);
+        if (cuenta == null) throw new Exception("Cuenta no encontrada");
+        if (!cuenta.isActiva()) throw new Exception("Cuenta inactiva");
+        if (monto <= 0) throw new Exception("Monto inválido");
+
         cuenta.setSaldo(cuenta.getSaldo() + monto);
         return true;
     }
 
     // Retiro
-    public boolean retirar(String numeroCuenta, double monto) {
+    public boolean retirar(String numeroCuenta, double monto) throws Exception {
         Cuentas cuenta = cuentas.get(numeroCuenta);
-        if (cuenta == null || monto <= 0 || cuenta.getSaldo() < monto) return false;
+        if (cuenta == null) throw new Exception("Cuenta no encontrada");
+        if (!cuenta.isActiva()) throw new Exception("Cuenta inactiva");
+        if (monto <= 0) throw new Exception("Monto inválido");
+        if (cuenta.getSaldo() < monto) throw new Exception("Saldo insuficiente");
+
         cuenta.setSaldo(cuenta.getSaldo() - monto);
         return true;
     }
 
     // Transferencia entre cuentas
-    public boolean transferir(String origen, String destino, double monto) {
+    public boolean transferir(String origen, String destino, double monto) throws Exception {
         if (retirar(origen, monto)) {
-            if (depositar(destino, monto)) {
+            try {
+                depositar(destino, monto);
                 return true;
-            } else {
-                // rollback del retiro si falla depósito
+            } catch (Exception e) {
+                // rollback
                 depositar(origen, monto);
+                throw new Exception("Error en la transferencia: " + e.getMessage());
             }
         }
         return false;
@@ -112,4 +141,9 @@ public class ServicioCuentas {
             System.err.println("Error al guardar consecutivo: " + e.getMessage());
         }
     }
+
+    public Map<String, Cuentas> getGestor() {
+    return cuentas;
+}
+
 }

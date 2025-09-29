@@ -13,31 +13,33 @@ import java.util.Objects;
  *
  * @author jprod
  */
+import java.util.*;
+
 public class GestorClientesMem implements IGestorClientes {
-    private final HashMap<String, Cliente> map;
-    private final ArrayList<Cliente> mapDeleted;
+    private final Map<String, Cliente> map;
+    private final List<Cliente> mapDeleted;
     private Cliente cliente;
+
+    public GestorClientesMem() {
+        this.map = new HashMap<>();
+        this.mapDeleted = new ArrayList<>();
+        this.cliente = null;
+    }
 
     @Override
     public Cliente ultimoRegistro() {
         return cliente;
     }
-    
-    public GestorClientesMem() {
-        map = new HashMap<>();
-        mapDeleted = new ArrayList<>();
-        cliente=null;
-    }
-    
+
     @Override
     public void guardar(Cliente cliente) {
         Objects.requireNonNull(cliente, "Cliente requerido");
-        if (map.putIfAbsent(cliente.getId(), cliente) != null){ 
+        if (map.putIfAbsent(cliente.getId(), cliente) != null) { 
             throw new IllegalStateException("Ya existe un cliente con id=" + cliente.getId());
         }
-        this.cliente=cliente;
+        this.cliente = cliente;
     }
-    
+
     @Override
     public void actualizar(Cliente cliente) {
         Objects.requireNonNull(cliente, "Cliente requerido");
@@ -46,26 +48,29 @@ public class GestorClientesMem implements IGestorClientes {
             throw new IllegalArgumentException("No existe cliente con id=" + id);
         }
         map.put(id, cliente);
-        this.cliente=cliente;
+        this.cliente = cliente;
     }
-    
+
     @Override
     public void eliminar(String id) {
         Objects.requireNonNull(id, "Id requerido");
-        if (map.remove(id) == null) {
+        Cliente eliminado = map.remove(id);
+        if (eliminado == null) {
             throw new IllegalArgumentException("No existe cliente con id=" + id);
         }
-        mapDeleted.add(cliente);
-        this.cliente=null;
+        mapDeleted.add(eliminado);
+        if (cliente != null && cliente.getId().equals(id)) {
+            this.cliente = null;
+        }
     }
-    
+
     @Override
     public Cliente buscar(String id) { 
         Objects.requireNonNull(id, "Id requerido");
-        cliente=map.get(id);
+        cliente = map.get(id);
         return cliente; 
     }
-    
+
     @Override
     public boolean existe(String id) {
         Objects.requireNonNull(id, "Id requerido");
@@ -77,7 +82,7 @@ public class GestorClientesMem implements IGestorClientes {
         return new ArrayList<>(map.values());
     }
     
-    public List<Cliente> ListarEliminados(){
-        return this.mapDeleted;
+    public List<Cliente> listarEliminados(){
+        return Collections.unmodifiableList(this.mapDeleted);
     }
 }

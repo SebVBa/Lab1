@@ -9,40 +9,54 @@ package Modelo;
  * @author sebas
  */
 public abstract class Cuentas {
-    private final String numCuenta;
-    private final Cliente cliente;
-    private boolean estado;
+    private final String numeroCuenta;   // identificador único de 17 dígitos
+    private final Cliente cliente;       // titular de la cuenta
+    private double saldo;
+    private boolean activa;              // true = activa, false = inactiva
 
-    public Cuentas(String numCuenta, Cliente cliente, boolean estado) {
-        this.numCuenta = numCuenta;
+    public Cuentas(String numeroCuenta, Cliente cliente) {
+        this.numeroCuenta = numeroCuenta;
         this.cliente = cliente;
-        this.estado = estado;
+        this.saldo = 0.0;
+        this.activa = true;
     }
 
-    public String getNumCuenta() {
-        return numCuenta;
+    // Métodos abstractos (depende de tipo de cuenta)
+    public abstract String getMoneda();
+
+    // Getters y Setters
+    public String getNumeroCuenta() {
+        return numeroCuenta;
     }
 
     public Cliente getCliente() {
         return cliente;
     }
 
-    public boolean isEstado() {
-        return estado;
+    public double getSaldo() {
+        return saldo;
     }
 
-    public void setEstado(boolean estado) {
-        this.estado = estado;
+    public void setSaldo(double saldo) {
+        this.saldo = saldo;
     }
 
-    double getSaldo() {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public boolean isActiva() {
+        return activa;
     }
 
-    void setSaldo(double d) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void setActiva(boolean activa) {
+        this.activa = activa;
     }
-    
-    
-    
+
+    @Override
+    public String toString() {
+        return "Cuenta{" +
+                "numeroCuenta='" + numeroCuenta + '\'' +
+                ", cliente=" + cliente.getNombre() +
+                ", saldo=" + saldo +
+                ", activa=" + activa +
+                ", moneda=" + getMoneda() +
+                '}';
+    }
 }

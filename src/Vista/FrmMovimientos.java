@@ -4,16 +4,19 @@
  */
 package Vista;
 
+import Modelo.ServicioCuentas;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author ilope
  */
 public class FrmMovimientos extends javax.swing.JInternalFrame {
 
-    /**
-     * Creates new form FrmMovimientos
-     */
-    public FrmMovimientos() {
+    private final ServicioCuentas servicioCuentas;
+
+    public FrmMovimientos(ServicioCuentas servicioCuentas) {
+        this.servicioCuentas = servicioCuentas;
         initComponents();
     }
 
@@ -203,13 +206,52 @@ public class FrmMovimientos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtDestinoActionPerformed
 
     private void btnRealizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarActionPerformed
-        
+        try {
+            String tipo = (String) cmbPrioridad.getSelectedItem();
+            String origen = txtOrigen.getText().trim();
+            String destino = txtDestino.getText().trim();
+            double monto = Double.parseDouble(txtMonto.getText().trim());
+
+            switch(tipo) {
+                case "Deposito":
+                    servicioCuentas.depositar(origen, monto);
+                    mostrarMensaje("Depósito realizado con éxito");
+                    break;
+                case "Retiro":
+                    servicioCuentas.retirar(origen, monto);
+                    mostrarMensaje("Retiro realizado con éxito");
+                    break;
+                case "Transferencia":
+                    if(destino.isBlank()) throw new IllegalArgumentException("Cuenta destino requerida");
+                    servicioCuentas.transferir(origen, destino, monto);
+                    mostrarMensaje("Transferencia realizada con éxito");
+                    break;
+                default:
+                    throw new IllegalArgumentException("Seleccione un tipo de movimiento válido");
+            }
+
+        } catch(Exception e) {
+            mostrarError(e.getMessage());
+        }
     }//GEN-LAST:event_btnRealizarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
-        
+        limpiarCampos();
     }//GEN-LAST:event_btnCancelarActionPerformed
+   private void limpiarCampos() {
+        txtOrigen.setText("");
+        txtDestino.setText("");
+        txtMonto.setText("");
+        cmbPrioridad.setSelectedIndex(0);
+    }
 
+    private void mostrarMensaje(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Información", JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void mostrarError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje, "Error", JOptionPane.ERROR_MESSAGE);
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelar;
