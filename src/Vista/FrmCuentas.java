@@ -4,10 +4,9 @@
  */
 package Vista;
 
+import Controlador.ControladorCuentas;
 import Modelo.Cliente;
 import Modelo.Cuentas;
-import Modelo.ServicioClientes;
-import Modelo.ServicioCuentas;
 import javax.swing.JOptionPane;
 
 /**
@@ -16,14 +15,12 @@ import javax.swing.JOptionPane;
  */
 public class FrmCuentas extends javax.swing.JInternalFrame {
 
-    private final ServicioCuentas servicioCuentas;
-    private final ServicioClientes servicioClientes;
+    private final ControladorCuentas controlador;
 
-    public FrmCuentas(ServicioCuentas servicioCuentas, ServicioClientes servicioClientes) {
-        this.servicioCuentas = servicioCuentas;
-        this.servicioClientes = servicioClientes;
-        initComponents();
-    }
+public FrmCuentas(ControladorCuentas controlador) {
+    this.controlador = controlador;
+    initComponents();
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -298,22 +295,19 @@ public class FrmCuentas extends javax.swing.JInternalFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         try {
-            String idCliente = txtId.getText().trim();
-            if(idCliente.isEmpty()) throw new IllegalArgumentException("ID Cliente requerido");
+        String idCliente = txtId.getText().trim();
+        if (idCliente.isEmpty()) throw new IllegalArgumentException("ID Cliente requerido");
 
-            Cliente cliente = servicioClientes.buscar(idCliente);
-            if(cliente == null) throw new IllegalArgumentException("Cliente no encontrado");
+        String tipo = cmbTipoCuenta.getSelectedItem().toString(); // Si usas JComboBox
+        controlador.crearCuenta(tipo, idCliente);
 
-            String tipo = "COLONES"; // Por simplicidad, puedes poner un JComboBox para elegir
-            Cuentas cuenta = servicioCuentas.crearCuenta(tipo, cliente);
-            txtEstadoCuenta.setText(cuenta.isActiva() ? "Activa" : "Inactiva");
-            txtNombre.setText(cliente.getNombre());
+        // Actualizar campos UI
+        txtNombre.setText(controlador.getClienteNombre(idCliente));
+        txtEstadoCuenta.setText("Activa"); // Asumimos que se crea activa
 
-            mostrarMensaje("Cuenta creada con éxito: " + cuenta.getNumeroCuenta());
-
-        } catch(Exception e) {
-            mostrarError(e.getMessage());
-        }
+    } catch (Exception e) {
+        mostrarError(e.getMessage());
+    }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed

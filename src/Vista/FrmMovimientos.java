@@ -4,7 +4,7 @@
  */
 package Vista;
 
-import Modelo.ServicioCuentas;
+import Controlador.ControladorCuentas;
 import javax.swing.JOptionPane;
 
 /**
@@ -13,12 +13,13 @@ import javax.swing.JOptionPane;
  */
 public class FrmMovimientos extends javax.swing.JInternalFrame {
 
-    private final ServicioCuentas servicioCuentas;
+    private final ControladorCuentas controlador;
 
-    public FrmMovimientos(ServicioCuentas servicioCuentas) {
-        this.servicioCuentas = servicioCuentas;
-        initComponents();
-    }
+public FrmMovimientos(ControladorCuentas controlador) {
+    this.controlador = controlador;
+    initComponents();
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -238,32 +239,32 @@ public class FrmMovimientos extends javax.swing.JInternalFrame {
 
     private void btnRealizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarActionPerformed
         try {
-            String tipo = (String) cmbPrioridad.getSelectedItem();
-            String origen = txtOrigen.getText().trim();
-            String destino = txtDestino.getText().trim();
-            double monto = Double.parseDouble(txtMonto.getText().trim());
+        String tipo = (String) cmbPrioridad.getSelectedItem();
+        String origen = txtOrigen.getText().trim();
+        String destino = txtDestino.getText().trim();
+        double monto = Double.parseDouble(txtMonto.getText().trim());
 
-            switch(tipo) {
-                case "Deposito":
-                    servicioCuentas.depositar(origen, monto);
-                    mostrarMensaje("Depósito realizado con éxito");
-                    break;
-                case "Retiro":
-                    servicioCuentas.retirar(origen, monto);
-                    mostrarMensaje("Retiro realizado con éxito");
-                    break;
-                case "Transferencia":
-                    if(destino.isBlank()) throw new IllegalArgumentException("Cuenta destino requerida");
-                    servicioCuentas.transferir(origen, destino, monto);
-                    mostrarMensaje("Transferencia realizada con éxito");
-                    break;
-                default:
-                    throw new IllegalArgumentException("Seleccione un tipo de movimiento válido");
-            }
-
-        } catch(Exception e) {
-            mostrarError(e.getMessage());
+        switch(tipo) {
+            case "Deposito":
+                controlador.depositar(origen, monto);
+                mostrarMensaje("Depósito realizado con éxito");
+                break;
+            case "Retiro":
+                controlador.retirar(origen, monto);
+                mostrarMensaje("Retiro realizado con éxito");
+                break;
+            case "Transferencia":
+                if(destino.isBlank()) throw new IllegalArgumentException("Cuenta destino requerida");
+                controlador.transferir(origen, destino, monto);
+                mostrarMensaje("Transferencia realizada con éxito");
+                break;
+            default:
+                throw new IllegalArgumentException("Seleccione un tipo de movimiento válido");
         }
+
+    } catch(Exception e) {
+        mostrarError(e.getMessage());
+    }
     }//GEN-LAST:event_btnRealizarActionPerformed
 
     private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
